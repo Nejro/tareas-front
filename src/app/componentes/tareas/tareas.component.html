@@ -1,0 +1,35 @@
+<section class="todoList-wrapper">
+  <h1 class="tittle">Tareas App</h1>
+  <div class="new-todo">
+    <input type="text" (keydown.enter)="addTodo" placeholder="Escribe una nueva tarea" [formControl]= "newTodo">
+    <button (click)="addTodo()">+</button>
+  </div>
+
+  <div class="filters">
+    <button (click)="changeFilter('all')" [class.active] = "filter() === 'all'">Todas</button>
+    <button (click)="changeFilter('active')" [class.active] = "filter() === 'active'">Activas</button>
+    <button (click)="changeFilter('completed')" [class.active] = "filter() === 'completed'">Completadas</button>
+  </div>
+
+  <ul class="todoList">
+    <ng-container *ngFor="let todo of todoListFiltered() | paginate: { itemsPerPage: 10, currentPage: p }">
+      <li [ngClass]="{ 'todo-editing': todo.editing, 'todo': !todo.editing }">
+
+        <ng-container *ngIf="todo.editing; else todoDisplay">
+          <input type="text" placeholder="Editar tarea" [value]="todo.title" (keydown.enter)="updateTodo(todo.id, $event)">
+        </ng-container>
+
+        <ng-template #todoDisplay>
+          <input type="checkbox" [checked]="todo.completed" (click)="toggleTodo(todo.id)">
+          <label>{{ todo.title }}</label>
+          <button *ngIf="!todo.completed" class="btn-editar" (click)="activateEditMode(todo.id)">Editar</button>
+          <button class="btn-eliminar" (click)="removeTodo(todo.id)">Eliminar</button>
+        </ng-template>
+      </li>
+    </ng-container>
+  </ul>
+  <pagination-controls  class="pagination-controls"(pageChange)="p = $event" previousLabel="Anterior" nextLabel="Siguiente"></pagination-controls>
+
+</section>
+
+
