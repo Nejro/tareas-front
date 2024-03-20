@@ -1,28 +1,28 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { tareas } from '../interfaces/tareas';
+import { Task } from '../interfaces/Task';
 @Injectable({
   providedIn: 'root'
 })
-export class tareasService {
+export class tasksService {
 
   servidor = 'http://localhost:4000';
   constructor(private servicio:HttpClient) { }
 
-  getTareas(): Observable<any> {
+  getTasks(): Observable<any> {
     return this.servicio.get(`${this.servidor}/api/tasks/getAll`);
   }
 
-  createTareas(tareas:tareas) {
-    return this.servicio.post<tareas>(`${this.servidor}/api/tasks/add`, tareas);
+  createTask(task:Task) {
+    return this.servicio.post<Task>(`${this.servidor}/api/tasks/add`, task);
   }
 
-  editarTareas(tarea: tareas): Observable<any> {
-    return this.servicio.put(`${this.servidor}/api/tasks/updateById/${tarea.id}`, tarea);
+  updateTask(task: Task): Observable<any> {
+    return this.servicio.put(`${this.servidor}/api/tasks/updateById/${task.id}`, task);
   }
 
-  deleteTareas(id: number): Observable<any> {
+  deleteTask(id: number): Observable<any> {
     return this.servicio.delete(`${this.servidor}/api/tasks/deleteById/${id}`);
   }
 }
